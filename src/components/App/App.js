@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../Modal/Modal";
+import PokeData from "../../api/services/PokeData";
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
+
+  PokeData();
 
   return (
     <div>
