@@ -5,6 +5,7 @@ import axios from "axios";
 
 function Pokedata() {
   const { changeData } = useContext(AppContext);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
