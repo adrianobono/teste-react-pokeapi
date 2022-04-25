@@ -1,17 +1,17 @@
 import config from "../../config";
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import axios from "axios";
 
-function Pokedata() {
-  const { changeData } = useContext(AppContext);
+function Pokedata(value) {
+  const { setPokemons, setStartData, setPokeList } = useContext(AppContext);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data: response } = await axios.get(`${config.POKE_URIAPI}20`);
-        changeData("setPokemons", response.results);
-        changeData("setStartData", response.results);
+        setPokemons(response.results);
+        setStartData(response.results);
         fetcPokeList(response.count);
       } catch (error) {
         console.error(error.message);
@@ -22,7 +22,7 @@ function Pokedata() {
         const { data: response } = await axios.get(
           `${config.POKE_URIAPI}${count}`
         );
-        changeData("setPokeList", response.results);
+        setPokeList(response.results);
       } catch (error) {
         console.error(error.message);
       }

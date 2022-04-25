@@ -1,38 +1,65 @@
-import React from "react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AppContext } from "../../contexts/AppContext";
 import { DebounceInput } from "react-debounce-input";
 import config from "../../config";
 import styled from "styled-components";
 
+import Modal from "../Modal/Modal";
+
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
+  justify-content: space-between;
+  overflow-y: auto;
+
+  height: 60vh;
+  margin-bottom: 20px;
 `;
 
 const List = styled.div`
   display: flex;
-  border: 1px solid blue;
-  flex: 1;
+  color: white;
+  background-color: #585656;
+  width: 45vw;
   align-items: center;
   justify-content: space-between;
-
-  padding: 5px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  border-right: 4px solid #ffaa00;
   margin: 5px;
+  max-height: 70px;
+
+  &.item-none {
+    display: none;
+  }
+`;
+
+const ItemCol = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 5px;
+`;
+const Rec = styled.div`
+  width: 7px;
+  background-color: white;
+  height: 100%;
+  transform: skewX(-20deg);
 `;
 
 const ItemCard = styled.div`
-  display: fex;
+  display: flex;
 `;
 
 const Item = styled.div`
-  width: 10vw;
-  margin-right: 5px;
+  width: 5vw;
   display: flex;
+  width: 25vw;
+  flex: 1;
   text-decoration: none;
-
   margin: 5px;
+
   &.item-bold {
     font-weight: 500;
     letter-spacing: 2px;
@@ -42,6 +69,9 @@ const Item = styled.div`
 const Image = styled.img`
   width: 64px;
   height: 64px;
+  padding-left: 15px;
+  padding-right: 15px;
+  flex: 1;
   cursor: pointer;
 `;
 
@@ -50,7 +80,11 @@ const Favorite = styled.div`
   height: 64px;
 `;
 
-function ListView() {
+const ListView = (props) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isOpen, setIsOpen] = useState(false);
+  const { url, setUrl, page } = useState(null);
+
   const { pokemons, startdata, pokelist, changeData, fav, setFavorite } =
     useContext(AppContext);
 
@@ -76,13 +110,16 @@ function ListView() {
 
   return (
     <div>
-      <DebounceInput
-        minLength={1}
-        debounceTimeout={300}
-        onChange={(e) => {
-          filterPokemon(e.target.value);
-        }}
-      />
+      {!props.filter && (
+        <DebounceInput
+          minLength={1}
+          debounceTimeout={300}
+          onChange={(e) => {
+            filterPokemon(e.target.value);
+          }}
+        />
+      )}
+
       <Container>
         {pokemons &&
           pokemons.map((poke) => {
@@ -96,17 +133,22 @@ function ListView() {
             const imageurl = config.IMAGE_POKE + "/" + id + ".png";
 
             return (
-              <List>
-                <Item>
-                  <Item>
-                    <Item className="item-bold">({id})</Item>
-                    <Item>{name}</Item>
+              <List
+                onClick={(e) => setUrl(url, poke.url)}
+                className={
+                  props.filter && !fav.includes(Number(id)) ? "item-none" : ""
+                }
+              >
+                <ItemCol>
+                  <Item className="item-bold">
+                    ({id}){" " + name}
                   </Item>
-                </Item>
+                </ItemCol>
+                <Rec />
                 <ItemCard>
-                  <Image src={imageurl ? imageurl : ""} alt="" />
+                  <Image src={imageurl} alt="" />
                 </ItemCard>
-
+                <Rec />
                 <ItemCard>
                   <Image
                     onClick={() => setFavorite(id)}
@@ -120,8 +162,12 @@ function ListView() {
             );
           })}
       </Container>
+
+      <Modal handleClose={() => setIsOpen(false)} isOpen={isOpen}>
+        ajdldfjadkjfa
+      </Modal>
     </div>
   );
-}
+};
 
 export default ListView;

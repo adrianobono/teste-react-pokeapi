@@ -5,7 +5,9 @@ export const AppContext = createContext();
 const AppProvider = ({ children }) => {
   const [pokemons, setPokemons] = useState([]);
   const [pokelist, setPokeList] = useState([]);
+  const [pokefav, setPokeFav] = useState([]);
   const [startdata, setStartData] = useState([]);
+  const [page, setpage] = useState([]);
   const [fav, setFav] = useState([]);
 
   const changeData = (state, value) => {
@@ -30,9 +32,16 @@ const AppProvider = ({ children }) => {
         pokemons,
         startdata,
         pokelist,
+        pokefav,
+        setPokeFav,
         fav,
         changeData,
         setFavorite,
+        setPokemons,
+        setPokeList,
+        setStartData,
+        page,
+        setpage,
       }}
     >
       {children}
