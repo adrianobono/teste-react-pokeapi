@@ -29,23 +29,21 @@ const ListView = (props) => {
     name: "",
     imageUrl: "",
   });
-  const { pokemons, setPokemons, startdata, pokelist, fav, setFavorite } =
-    useContext(AppContext);
 
   const filterPokemon = (value) => {
     if (value === "") {
-      setPokemons(startdata);
+      context.setPokemons(context.startdata);
       return;
     }
 
-    const pokefilter = pokemons.filter((pokemon) =>
+    const pokefilter = context.pokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(value.toLowerCase())
     );
 
     pokefilter.length > 0
-      ? setPokemons(pokefilter)
-      : setPokemons(
-          pokelist.filter((pokemon) =>
+      ? context.setPokemons(pokefilter)
+      : context.setPokemons(
+          context.pokelist.filter((pokemon) =>
             pokemon.name.toLowerCase().includes(value.toLowerCase())
           )
         );
@@ -66,24 +64,11 @@ const ListView = (props) => {
           />
         </Header>
       )}
-      {props.filter && (
-        <Header>
-          <List>
-            <Item className="item-msg">
-              {fav.length === 0 &&
-                "Oops, você ainda não favoritou nehum pokémon..."}
-              {fav.length > 0 &&
-                fav.length < 4 &&
-                "Boa a sua jornada já está começando..."}
-              {fav.length > 4 &&
-                " Agora sim você já se tornou um caçador de pokémons..."}
-            </Item>
-          </List>
-        </Header>
-      )}
+
       <Container>
-        {pokemons &&
-          pokemons.map((poke, index) => {
+        {context &&
+          context.pokemons &&
+          context.pokemons.map((poke, index) => {
             const name = poke.name
               .trim()
               .toLowerCase()
@@ -105,7 +90,7 @@ const ListView = (props) => {
                     });
                     setTimeout(() => {
                       setIsOpen(true);
-                    }, 500);
+                    }, 200);
                   }}
                 >
                   <Item className="item-bold">
@@ -123,7 +108,7 @@ const ListView = (props) => {
                     });
                     setTimeout(() => {
                       setIsOpen(true);
-                    }, 500);
+                    }, 200);
                   }}
                 >
                   <Image src={imageurl} alt="" />
@@ -131,9 +116,9 @@ const ListView = (props) => {
                 <Rec />
                 <ItemCard>
                   <Image
-                    onClick={() => setFavorite(id, poke)}
+                    onClick={() => context.setFavorite(id, poke)}
                     src={`/images/${
-                      fav.includes(Number(id)) ? "remfav" : "addfav"
+                      context.fav.includes(Number(id)) ? "remfav" : "addfav"
                     }.png`}
                     alt=""
                   />

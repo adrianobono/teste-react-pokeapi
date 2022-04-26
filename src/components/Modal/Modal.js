@@ -63,11 +63,13 @@ function Modal({ children, isOpen, handleClose, pokedata }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { data: response } = await axios.get(`${pokedata.url}`);
-        context.setModalData(response);
-      } catch (error) {
-        console.error(error.message);
+      if (pokedata && pokedata.url) {
+        try {
+          const { data: response } = await axios.get(`${pokedata?.url}`);
+          context.setModalData(response);
+        } catch (error) {
+          console.error(error.message);
+        }
       }
     };
     fetchData();

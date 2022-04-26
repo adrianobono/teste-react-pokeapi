@@ -22,7 +22,6 @@ import Modal from "../Modal/Modal";
 const ListViewFilter = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const context = useContext(AppContext);
-  const { pokelist, fav, setFavorite } = useContext(AppContext);
   const [modalContent, setModalContent] = useState({
     id: "",
     url: "",
@@ -34,24 +33,24 @@ const ListViewFilter = (props) => {
       <Header>
         <List>
           <Item className="item-msg">
-            {fav.length === 0 &&
-              "Oops você ainda não favoritou nehum pokémon..."}
-            {fav.length > 0 &&
-              fav.length < 4 &&
+            {context.fav.length === 0 &&
+              "Oops, você ainda não favoritou nehum pokémon..."}
+            {context.fav.length > 0 &&
+              context.fav.length < 5 &&
               "Boa a sua jornada já está começando..."}
-
-            {fav.length > 4 &&
-              " Agora sim você já se tornou um caçador de pokémons..."}
+            {context.fav.length > 4 &&
+              "Agora sim você já se tornou um caçador de pokémons..."}
           </Item>
         </List>
       </Header>
 
       <Container>
-        {fav &&
-          fav.length > 0 &&
-          fav.map((indice, index) => {
+        {context &&
+          context.fav &&
+          context.fav.length > 0 &&
+          context.fav.map((indice, index) => {
             if (indice > 10000) indice = indice - 9102;
-            let poke = pokelist[indice - 1];
+            let poke = context.pokelist[indice - 1];
             const name = poke.name
               .trim()
               .toLowerCase()
@@ -99,9 +98,9 @@ const ListViewFilter = (props) => {
                 <Rec />
                 <ItemCard>
                   <Image
-                    onClick={() => setFavorite(id, poke)}
+                    onClick={() => context.setFavorite(id, poke)}
                     src={`/images/${
-                      fav.includes(Number(id)) ? "remfav" : "addfav"
+                      context.fav.includes(Number(id)) ? "remfav" : "addfav"
                     }.png`}
                     alt=""
                   />
