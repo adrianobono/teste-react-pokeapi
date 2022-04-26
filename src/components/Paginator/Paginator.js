@@ -2,16 +2,25 @@ import React from "react";
 import { useContext, useState, useEffect } from "react";
 import { Pagination } from "react-pagination-bar";
 import { AppContext } from "../../contexts/AppContext";
-import Pokedata from "../../api/services/PokeData";
 import axios from "axios";
 import "react-pagination-bar/dist/index.css";
 import config from "../../config";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: center;
+  overflow-y: auto;
+  height: 55vh;
+  margin-bottom: 20px;
+  margin-top: 20px;
+`;
 
 function Paginator() {
   const [pg, setPg] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const { pokelist, setPokemons, setPage, setStartData } =
-    useContext(AppContext);
+  const { pokelist, setPokemons, setStartData } = useContext(AppContext);
 
   useEffect(() => {
     if (pg > 0 && pokelist.length > 21) {
@@ -22,8 +31,6 @@ function Paginator() {
           );
           setPokemons(response.results);
           setStartData(response.results);
-
-          setPage(pg - 1);
         } catch (error) {
           console.error(error.message);
         }
@@ -33,21 +40,21 @@ function Paginator() {
   }, [pg]);
 
   return (
-    <div>
+    <Container>
       {pokelist && pokelist.length > 20 && (
         <Pagination
-          startLabel="Inicio"
+          startLabel="Início"
           endLabel="Fim"
-          nextLabel="Prox"
+          nextLabel="Próxima"
           prevLabel="Voltar"
           initialPage={1}
           itemsPerPage={20}
           onPageСhange={(e) => setPg(e)}
-          totalItems={pokelist && pokelist.length}
-          pageNeighbours={8}
+          totalItems={pokelist.length}
+          pageNeighbours={6}
         />
       )}
-    </div>
+    </Container>
   );
 }
 

@@ -1,5 +1,6 @@
 body {
   margin: 10;
+  overflow-y: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -7,4 +8,15 @@ body {
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+input {
+  height: 40px;
+  width: 30vw;
+  margin: 5px;
+  font-size: 1.5rem;
+  background: url(https://icanvas.com.br/lupa.png) no-repeat scroll 7px 7px;
+  padding-left: 40px;
+  border: 3px solid rgb(131, 131, 130);
+  border-radius: 10px;
 }

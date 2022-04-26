@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import styled from "styled-components";
 import ReactPortal from "../ReactPortal";
+import axios from "axios";
 
 const ModalStack = styled.div`
   position: fixed;
@@ -31,7 +32,9 @@ const ModalStack = styled.div`
 `;
 
 const ModalContent = styled.div`
-  width: 30%;
+  display: flex;
+  justify-content: center;
+  width: 60%;
   height: 50%;
   background-color: #282c34;
   color: #fff;
@@ -43,11 +46,27 @@ const ModalContent = styled.div`
 
 const ExitBtn = styled.button`
   cursor: pointer;
+  border: 0;
+  color: #ffd51e;
+  font-weight: 500;
   font-size: 1rem;
+  background-color: #585656;
 `;
 
-function Modal({ children, isOpen, handleClose }) {
+function Modal({ children, isOpen, handleClose, pokedata }) {
   const nodeRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data: response } = await axios.get(`${pokedata.url}`);
+        console.log(response);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchData();
+  }, [pokedata]);
 
   useEffect(() => {
     const closeOnEscapeKey = (e) => (e.key === "Escape" ? handleClose() : null);
@@ -67,7 +86,7 @@ function Modal({ children, isOpen, handleClose }) {
         nodeRef={nodeRef}
       >
         <ModalStack ref={nodeRef}>
-          <ExitBtn onClick={handleClose}>Close</ExitBtn>
+          <ExitBtn onClick={handleClose}>Sair X</ExitBtn>
           <ModalContent>{children}</ModalContent>
         </ModalStack>
       </CSSTransition>

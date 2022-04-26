@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import Modal from "../Modal/Modal";
 import PokeData from "../../api/services/PokeData";
-import ListView from "../ListView/ListView";
+import styled from "styled-components";
+
 import Tabs from "../Tabs/Tabs";
-import Paginator from "../Paginator/Paginator";
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
-
   PokeData();
-
   return (
-    <div>
-      <button onClick={() => setIsOpen(true)}>ViewPokeInfos</button>
-      <Modal handleClose={() => setIsOpen(false)} isOpen={isOpen}>
-        PokeInfo
-      </Modal>
+    <Container>
+      <img
+        height="100"
+        src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg"
+      />
       <Tabs />
-      <Paginator />
-    </div>
+    </Container>
   );
 }
 export default App;

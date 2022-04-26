@@ -5,25 +5,28 @@ export const AppContext = createContext();
 const AppProvider = ({ children }) => {
   const [pokemons, setPokemons] = useState([]);
   const [pokelist, setPokeList] = useState([]);
-  const [pokefav, setPokeFav] = useState([]);
+  const [pokefavlist, setPokeFavList] = useState([]);
   const [startdata, setStartData] = useState([]);
-  const [page, setpage] = useState([]);
   const [fav, setFav] = useState([]);
-
-  const changeData = (state, value) => {
-    let set = eval(state);
-    set(value);
-  };
+  const [modalData, setModalData] = useState([]);
 
   const setFavorite = (value) => {
     if (!fav.includes(Number(value))) {
       setFav([...fav, Number(value)]);
     } else {
-      let temp = [...fav];
-      temp.splice(temp.indexOf(Number(value)), 1);
-      setFav(temp);
+      let arrayClean = [...fav];
+      arrayClean.splice(arrayClean.indexOf(Number(value)), 1);
+      setFav(arrayClean);
     }
-    console.log(fav);
+  };
+
+  const setInitialData = (data) => {
+    setPokemons(data);
+    setStartData(data);
+  };
+
+  const setInitialList = (data) => {
+    setPokeList(data);
   };
 
   return (
@@ -32,16 +35,16 @@ const AppProvider = ({ children }) => {
         pokemons,
         startdata,
         pokelist,
-        pokefav,
-        setPokeFav,
+        pokefavlist,
+        setPokeFavList,
         fav,
-        changeData,
         setFavorite,
         setPokemons,
         setPokeList,
         setStartData,
-        page,
-        setpage,
+        modalData,
+        setModalData,
+        setInitialData,
       }}
     >
       {children}
