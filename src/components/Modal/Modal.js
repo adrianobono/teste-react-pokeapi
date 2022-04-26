@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { CSSTransition } from "react-transition-group";
+import { AppContext } from "../../contexts/AppContext";
 import styled from "styled-components";
 import ReactPortal from "../ReactPortal";
 import axios from "axios";
@@ -34,7 +35,7 @@ const ModalStack = styled.div`
 const ModalContent = styled.div`
   display: flex;
   justify-content: center;
-  width: 60%;
+  width: 50%;
   height: 50%;
   background-color: #282c34;
   color: #fff;
@@ -42,6 +43,7 @@ const ModalContent = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+  border: 2px solid white;
 `;
 
 const ExitBtn = styled.button`
@@ -49,18 +51,21 @@ const ExitBtn = styled.button`
   border: 0;
   color: #ffd51e;
   font-weight: 500;
-  font-size: 1rem;
+  width: 8vw;
+  font-size: 1.2rem;
+  padding: 3px;
   background-color: #585656;
 `;
 
 function Modal({ children, isOpen, handleClose, pokedata }) {
+  const context = useContext(AppContext);
   const nodeRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data: response } = await axios.get(`${pokedata.url}`);
-        console.log(response);
+        context.setModalData(response);
       } catch (error) {
         console.error(error.message);
       }

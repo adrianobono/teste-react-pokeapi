@@ -22,6 +22,7 @@ import Modal from "../Modal/Modal";
 
 const ListView = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const context = useContext(AppContext);
   const [modalContent, setModalContent] = useState({
     id: "",
     url: "",
@@ -91,7 +92,7 @@ const ListView = (props) => {
               );
             let id = poke.url.slice(0, -1).split("/").at(-1);
             const imageurl = config.IMAGE_POKE + "/" + id + ".svg";
-            id = Number(id) < 1000 ? id : Number(id) - 9103;
+            id = Number(id) < 899 ? id : Number(id) - 9102;
             return (
               <List key={index}>
                 <ItemCol
@@ -150,15 +151,23 @@ const ListView = (props) => {
         >
           <ModalCenter>
             <ItemModal className="item-bold item-col">
-              <ItemCard>Nome: {modalContent.name}</ItemCard>
-
-              <LazyLoad height={200}>
+              <ItemCard className="title">Nome: {modalContent.name}</ItemCard>
+              <LazyLoad height={200} display={"flex"}>
                 <PokeImage src={modalContent.imageUrl} />
               </LazyLoad>
             </ItemModal>
 
             <ItemModal className="item-bold item-col">
-              <ItemCard>Tipo: {modalContent.name}</ItemCard>
+              {context.modalData && context.modalData.types && (
+                <ItemCol>
+                  <Item>Tipo: {context.modalData.types[0].type.name}</Item>
+                  <Item>Altura: {context.modalData.height} metros</Item>
+                  <Item>Peso: {context.modalData.weight} Kilos</Item>
+                  <Item>
+                    Habilidade: {context.modalData.abilities[0].ability.name}
+                  </Item>
+                </ItemCol>
+              )}
             </ItemModal>
           </ModalCenter>
         </Modal>

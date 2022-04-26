@@ -77,6 +77,12 @@ export const Rec = styled.div`
 export const ItemCard = styled.div`
   display: flex;
   cursor: pointer;
+  &.title {
+    padding: 5px;
+    height: 30px;
+    margin-top: --20px;
+    background-color: #585656;
+  }
 `;
 
 export const Item = styled.div`

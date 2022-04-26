@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { AppContext } from "../../contexts/AppContext";
+import LazyLoad from "react-lazyload";
 import config from "../../config";
 
 import {
@@ -11,14 +12,23 @@ import {
   ItemCard,
   Item,
   Image,
+  PokeImage,
+  ModalCenter,
+  ItemModal,
 } from "./ListView.styled";
 
 import Modal from "../Modal/Modal";
 
 const ListViewFilter = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const context = useContext(AppContext);
   const { pokelist, fav, setFavorite } = useContext(AppContext);
-
+  const [modalContent, setModalContent] = useState({
+    id: "",
+    url: "",
+    name: "",
+    imageUrl: "",
+  });
   return (
     <div>
       <Header>
@@ -48,18 +58,42 @@ const ListViewFilter = (props) => {
               .replace(/\w\S*/g, (w) =>
                 w.replace(/^\w/, (c) => c.toUpperCase())
               );
-            const id = poke.url.slice(0, -1).split("/").at(-1);
-            const imageurl = config.IMAGE_POKE + "/" + id + ".png";
-
+            let id = poke.url.slice(0, -1).split("/").at(-1);
+            const imageurl = config.IMAGE_POKE + "/" + id + ".svg";
+            id = Number(id) < 1000 ? id : Number(id) - 9102;
             return (
               <List key={index}>
-                <ItemCol onClick={(e) => setIsOpen(true)}>
+                <ItemCol
+                  onClick={(e) => {
+                    setModalContent({
+                      id: id,
+                      url: poke.url,
+                      name: name,
+                      imageUrl: imageurl,
+                    });
+                    setTimeout(() => {
+                      setIsOpen(true);
+                    }, 500);
+                  }}
+                >
                   <Item className="item-bold">
-                    ({Number(id) < 1000 ? id : Number(id) - 9103}){" " + name}
+                    ({Number(id) < 10000 ? id : Number(id) - 9103}){" " + name}
                   </Item>
                 </ItemCol>
                 <Rec />
-                <ItemCard onClick={(e) => setIsOpen(true)}>
+                <ItemCard
+                  onClick={(e) => {
+                    setModalContent({
+                      id: id,
+                      url: poke.url,
+                      name: name,
+                      imageUrl: imageurl,
+                    });
+                    setTimeout(() => {
+                      setIsOpen(true);
+                    }, 500);
+                  }}
+                >
                   <Image src={imageurl ? imageurl : ""} alt="" />
                 </ItemCard>
                 <Rec />
@@ -77,9 +111,35 @@ const ListViewFilter = (props) => {
           })}
       </Container>
 
-      <Modal handleClose={() => setIsOpen(false)} isOpen={isOpen}>
-        ajdldfjadkjfa
-      </Modal>
+      {modalContent && modalContent.imageUrl !== "" && (
+        <Modal
+          handleClose={() => setIsOpen(false)}
+          isOpen={isOpen}
+          pokedata={modalContent}
+        >
+          <ModalCenter>
+            <ItemModal className="item-bold item-col">
+              <ItemCard className="title">Nome: {modalContent.name}</ItemCard>
+              <LazyLoad height={200} display={"flex"}>
+                <PokeImage src={modalContent.imageUrl} />
+              </LazyLoad>
+            </ItemModal>
+
+            <ItemModal className="item-bold item-col">
+              {context.modalData && context.modalData.types && (
+                <ItemCol>
+                  <Item>Tipo: {context.modalData.types[0].type.name}</Item>
+                  <Item>Altura: {context.modalData.height} metros</Item>
+                  <Item>Peso: {context.modalData.weight} Kilos</Item>
+                  <Item>
+                    Habilidade: {context.modalData.abilities[0].ability.name}
+                  </Item>
+                </ItemCol>
+              )}
+            </ItemModal>
+          </ModalCenter>
+        </Modal>
+      )}
     </div>
   );
 };

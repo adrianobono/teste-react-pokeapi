@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 
 export const AppContext = createContext();
 
@@ -12,13 +12,31 @@ const AppProvider = ({ children }) => {
 
   const setFavorite = (value) => {
     if (!fav.includes(Number(value))) {
-      setFav([...fav, Number(value)]);
+      setTimeout(() => {
+        setFav([...fav, Number(value)]);
+      }, 200);
+      localStorage.setItem("data", JSON.stringify(fav));
     } else {
       let arrayClean = [...fav];
       arrayClean.splice(arrayClean.indexOf(Number(value)), 1);
       setFav(arrayClean);
+      localStorage.setItem("data", JSON.stringify(arrayClean));
     }
   };
+
+  useEffect(() => {
+    if (fav.length > 0) localStorage.setItem("data", JSON.stringify(fav));
+    else {
+    }
+  }, [fav]);
+
+  useEffect(() => {
+    if (localStorage.getItem("data")) {
+      if (JSON.parse(localStorage.getItem("data")).length > 0) {
+        setFav(JSON.parse(localStorage.getItem("data")));
+      }
+    }
+  }, []);
 
   const setInitialData = (data) => {
     setPokemons(data);
@@ -42,6 +60,7 @@ const AppProvider = ({ children }) => {
         setPokemons,
         setPokeList,
         setStartData,
+        setInitialList,
         modalData,
         setModalData,
         setInitialData,
