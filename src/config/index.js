@@ -5,9 +5,12 @@ const IMAGE_POKE =
 const IMAGE_POKE_PNG =
   "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
+const RANGE = 20;
+
 export default {
   POKE_URIAPI,
   IMAGE_POKE,
   POKE_URIAPI_OFF,
   IMAGE_POKE_PNG,
+  RANGE,
 };

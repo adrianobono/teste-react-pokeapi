@@ -9,6 +9,7 @@ const AppProvider = ({ children }) => {
   const [startdata, setStartData] = useState([]);
   const [fav, setFav] = useState([]);
   const [modalData, setModalData] = useState([]);
+  const [range, setRange] = useState(20);
 
   const setFavorite = (value) => {
     if (!fav.includes(Number(value))) {
@@ -64,6 +65,7 @@ const AppProvider = ({ children }) => {
         modalData,
         setModalData,
         setInitialData,
+        range,
       }}
     >
       {children}
